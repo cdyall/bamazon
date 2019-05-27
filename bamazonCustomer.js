@@ -1,5 +1,5 @@
 var mysql = require("mysql");
-// var inquirer = require("inquirer");
+var inquirer = require("inquirer");
 var Table = require("cli-table");
 
 var connection = mysql.createConnection({
@@ -28,20 +28,35 @@ var productTable = function() {
         [res[i].item_id,res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
       );
     }
-    console.log(table.toString());
+    console.log(displayTable.toString());
+    whichItem();
   });
 };
 
-// inquirer
-//   .prompt([
-//     {
-//       type: "list",
-//       name: "action",
-//       message:
-//         "Would you prefer to bid on an item or post an item for bidding?",
-//       choices: ["I would like to bid!", "I would rather post soemthing!"]
-//     }
-//   ])
-//   .then(answers => {
-//     console.log(word);
-//   });
+function whichItem() {
+
+  inquirer.prompt([
+
+    {
+      name: "ID",
+      type: "input",
+      message: "Choose the ID of the Item you want.",
+      filter: Number
+    },
+    {
+      name: "Amount",
+      type: "input",
+      message: "How many of this item do you want ?",
+      filter: Number
+    },
+
+  ])
+  .then(function(answers){
+
+    var amountRequested = answers.Amount;
+    var specificID = answers.ID;
+    receipt(specificID, amountRequested);
+
+  });
+
+};
